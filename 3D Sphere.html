@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D ISSWRR </title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+<!-- Include Three.js and OrbitControls.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.138.0/build/three.min.js"></script>
+<!-- Updated path for OrbitControls -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+
+// Scene setup
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000); // Set background to black
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Controls for click and drag interaction
+var controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.1;
+controls.enableZoom = true;
+controls.autoRotate = true; // Enable auto-rotation
+controls.autoRotateSpeed = 0.5; // Adjust auto-rotate speed
+
+// Sphere creation
+var sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+var sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, wireframe: true });
+var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+scene.add(sphere);
+
+// Rings creation
+var ringMaterial = new THREE.MeshBasicMaterial({ color: 0x333333, side: THREE.DoubleSide });
+var rings = [];
+var ringSizes = [1.5, 1.75, 2, 2.25, 2.5];
+
+for (let i = 0; i < 5; i++) {
+    var ringGeometry = new THREE.RingGeometry(ringSizes[i], ringSizes[i] + 0.05, 64);
+    var ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.rotation.x = Math.PI / 2;
+    scene.add(ring);
+    rings.push(ring);
+}
+
+// Background stars
+var starsGeometry = new THREE.BufferGeometry();
+var starVertices = [];
+
+for (let i = 0; i < 10000; i++) {
+    var star = new THREE.Vector3();
+    star.x = THREE.MathUtils.randFloatSpread(2000);
+    star.y = THREE.MathUtils.randFloatSpread(2000);
+    star.z = THREE.MathUtils.randFloatSpread(2000);
+    starVertices.push(star.x, star.y, star.z);
+}
+
+starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+var starsMaterial = new THREE.PointsMaterial({ color: 0xffffff }); // Make stars white
+var starField = new THREE.Points(starsGeometry, starsMaterial);
+scene.add(starField);
+
+// Automatic rotation
+var autoRotate = true;
+
+// Animation loop
+function animate() {
+    requestAnimationFrame(animate);
+
+    if (autoRotate) {
+        // Automatic rotation logic
+        sphere.rotation.y += 0.005;
+        rings.forEach((ring, index) => {
+            ring.rotation.z += (0.01 + index * 0.001) * (index % 2 ? 1 : -1);
+        });
+    }
+
+    // Required if controls.enableDamping or controls.autoRotate are set to true
+    controls.update();
+
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// Add event listener to toggle auto-rotate on mouse down
+renderer.domElement.addEventListener('mousedown', function() {
+    autoRotate = false;
+    controls.autoRotate = false;
+});
+
+// Add event listener to re-enable auto-rotate on mouse up
+renderer.domElement.addEventListener('mouseup', function() {
+    autoRotate = true;
+    controls.autoRotate = true;
+});
+
+// Handle window resize
+window.addEventListener('resize', onWindowResize, false);
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+</script>
+</body>
+</html>
+
