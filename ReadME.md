@@ -1,3 +1,5 @@
+![earth](https://github.com/AltUser44/3dSphere/assets/138399028/4c78ae47-ea4b-4f0f-9827-581928041284)
+
 
 This program is an interactive 3D web visualization of a spinning sphere, encircled by five 
 individually rotating rings. This is set against a pitch-black background that mimics 
