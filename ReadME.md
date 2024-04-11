@@ -12,3 +12,18 @@ Users can click and drag to control the camera's view, exploring the sphere and 
 To enhance user interaction, the program utilizes OrbitControls.js, a part of the Three.js library, allowing for intuitive camera control. 
 When the user is not interacting with the scene, it continues to auto-rotate, ensuring the display remains dynamic and engaging
 making it easy for users to engage with the 3D scene, offering a seamless and responsive experience.
+
+
+
+---------------------------------------------
+To run the 3D ISSWRR file locally, follow these steps:
+
+1. Download or clone the repository to your local machine.
+2. Navigate to the directory where you've downloaded the repository.
+3. Open the `index.html` file in your web browser.
+
+   You can do this by:
+   - Double-click the `index.html` file, which should open in your default web browser.
+   - Right-clicking the `index.html` file, select 'Open with', and choose your preferred browser.
+   - Dragging and dropping the `index.html` file into an open browser window.
+
